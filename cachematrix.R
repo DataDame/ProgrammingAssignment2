@@ -33,8 +33,19 @@ cacheSolve <- function(x, ...) {
   data <- x$get()
   inv <- tryCatch({solve(data)},
                     error = function(err) { 
-                      message("Matrix inverse cannot be computed") 
+                      message("Matrix is non-invertible, Inverse cannot be computed") 
                     })
   x$setmatinv(inv)
   inv
 }
+
+##Sample Run
+amatrix = makeCacheMatrix(matrix(c(1,2,3,4), nrow=2, ncol=2))
+amatrix$get() 
+cacheSolve(amatrix) 
+cacheSolve(amatrix)
+amatrix$set(matrix(c(0,5,99,66), nrow=2, ncol=2)) # Modify existing matrix
+cacheSolve(amatrix)   # Computes, caches, and returns new matrix inverse
+amatrix = makeCacheMatrix(matrix(c(-1,-1,-1,-1), nrow=2, ncol=2)) # non-invertible matrix
+amatrix$get() 
+cacheSolve(amatrix)  ## provides friendly message if matrix is not invertible
